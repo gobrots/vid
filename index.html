@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Video Player</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Watch and enjoy videos with our simple and easy-to-use video player.">
+<meta name="keywords" content="video player, watch video, online video, video streaming, watch videos">
+<meta name="author" content="Video Player">
+<meta name="generator" content="Video Player">
+<meta name="theme-color" content="#563d7c">
+<meta name="google" content="notranslate">
+<link rel="canonical" href="https://gobrots.github.io/vid">
+<meta property="og:type" content="video.other">
+<meta property="og:url" content="https://gobrots.github.io/vid">
+<meta property="og:title" content="Video Player">
+<meta property="og:description" content="Watch and enjoy videos with our simple and easy-to-use video player.">
+<meta property="og:image" content="https://gobrots.github.io/vid/ZyrolinkBG.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Video Player">
+<meta property="fb:app_id" content="200368456664008">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Video Player">
+<meta name="twitter:description" content="Watch and enjoy videos with our simple and easy-to-use video player.">
+<meta name="twitter:image" content="https://gobrots.github.io/vid/ZyrolinkBG.jpg">
+<meta name="apple-itunes-app" content="app-id=200368456664008">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #0f0f0f;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Loading */
+    #loadingScreen {
+      position: fixed;
+      inset: 0;
+      background: #0f0f0f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .spinner {
+      width: 42px;
+      height: 42px;
+      border: 4px solid rgba(255,255,255,0.15);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Video Mode */
+    #videoMode {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 100;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .video-wrapper {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+    }
+
+    #blogVideo {
+      width: 100%;
+      height: 100%;
+      max-height: 100vh;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .video-click {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      cursor: pointer;
+    }
+
+    /* Play Button */
+    #playButton {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 78px;
+      height: 78px;
+      background: rgba(0,0,0,0.55);
+      border: 3px solid #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    #playButton:hover {
+      background: rgba(255,255,255,0.18);
+      transform: translate(-50%, -50%) scale(1.08);
+    }
+
+    #playButton::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 24px solid #fff;
+      border-top: 15px solid transparent;
+      border-bottom: 15px solid transparent;
+      margin-left: 6px;
+    }
+
+    /* Progress Bar + Time */
+    .progress-container {
+      position: absolute;
+      bottom: 28px;
+      left: 0;
+      right: 0;
+      padding: 0 16px;
+      z-index: 30;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      opacity: 1;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      transform: translateY(0);
+    }
+
+    .progress-container.hidden {
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+    }
+
+    .progress-area {
+      height: 6px;
+      background: rgba(255,255,255,0.25);
+      cursor: pointer;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #ff2d55;
+      transition: width 0.1s linear;
+      border-radius: 4px;
+    }
+
+    .time-display {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      font-family: monospace;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+      user-select: none;
+    }
+
+    /* Close Button */
+    #closeButton {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 42px;
+      height: 42px;
+      background: rgba(0,0,0,0.6);
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    #closeButton:hover {
+      background: rgba(255,255,255,0.2);
+    }
+
+    /* Sidebar Toggle */
+    #sidebarToggle {
+      position: fixed;
+      left: 0px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 52px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 0 10px 10px 0;
+      cursor: pointer;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s;
+      backdrop-filter: blur(4px);
+    }
+
+    #sidebarToggle:hover {
+      background: rgba(255,255,255,0.22);
+      width: 32px;
+    }
+
+    #sidebarToggle::before {
+      content: "›";
+      color: #fff;
+      font-size: 22px;
+      font-weight: bold;
+      opacity: 0.8;
+    }
+
+    /* Sidebar Panel */
+    #sidebarPanel {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 300px;
+      height: 100%;
+      background: rgba(18, 18, 18, 0.97);
+      z-index: 300;
+      transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 8px 0 30px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    #sidebarPanel.open {
+      left: 0;
+    }
+
+    .sidebar-header {
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .sidebar-header h3 {
+      font-size: 16px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    #sidebarClose {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      opacity: 0.7;
+      line-height: 1;
+      padding: 4px 8px;
+    }
+
+    #sidebarClose:hover {
+      opacity: 1;
+    }
+
+    .sidebar-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .sidebar-content .placeholder {
+      opacity: 0.5;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loading -->
+  <div id="loadingScreen">
+    <div class="spinner"></div>
+    <div style="opacity:0.7;font-size:14px;">Memuat...</div>
+  </div>
+
+  <!-- Tombol Sidebar -->
+  <div id="sidebarToggle" title="Buka panel"></div>
+
+  <!-- Panel Sidebar -->
+  <div id="sidebarPanel">
+    <div class="sidebar-header">
+      <h3>Info / Menu</h3>
+      <button id="sidebarClose">×</button>
+    </div>
+    <div class="sidebar-content">
+      <!-- ============================== -->
+      <!--  ISI SENDIRI DI SINI NANTI     -->
+      <!-- ============================== -->
+      <div class="placeholder">
+        Tempat konten sidebar.<br><br>
+        Kamu bisa ganti bagian ini dengan link, teks, atau apa saja yang kamu mau.
+      </div>
+    </div>
+  </div>
+
+  <!-- Video Player -->
+  <div id="videoMode">
+    <div class="video-wrapper">
+      <video id="blogVideo" playsinline webkit-playsinline></video>
+      <div class="video-click"></div>
+      <div id="playButton"></div>
+
+      <!-- Progress + Time -->
+      <div class="progress-container" id="progressContainer">
+        <div class="progress-area">
+          <div class="progress-fill"></div>
+        </div>
+        <div class="time-display">
+          <span id="currentTime">00:00</span> / <span id="totalTime">00:00</span>
+        </div>
+      </div>
+
+      <button id="closeButton" title="Tutup">×</button>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+    var videoID = params.get("id");
+    var server = params.get("ser") || "1";
+
+    if(!videoID){
+      const lastID = localStorage.getItem("lastVideoID");
+      const lastSer = localStorage.getItem("lastServer") || "1";
+      if(lastID){
+        const newURL = `${window.location.origin}${window.location.pathname}?id=${lastID}&ser=${lastSer}`;
+        window.location.href = newURL;
+        return;
+      } else {
+        showNoVideoInfo();
+        return;
+      }
+    } else {
+      localStorage.setItem("lastVideoID", videoID);
+      localStorage.setItem("lastServer", server);
+    }
+
+    var loadingScreen = document.getElementById("loadingScreen");
+    if(loadingScreen) loadingScreen.style.display = "none";
+
+    function decodeBase64(str){
+      try { return atob(str); }
+      catch(e){ return "https://cdn2.videy.co/"; }
+    }
+
+    const serverList = {
+      "1": "aHR0cHM6Ly9jZG4yLnZpZGV5LmNvLw==",
+      "2": "aHR0cHM6Ly9jZG4uYWNlaW1nLmNvbS8=",
+      "3": "aHR0cHM6Ly9maWxlcy5jYXRib3gubW9lLw==",
+      "4": "aHR0cHM6Ly9maWxlLmdhcmRlbi8="
+    };
+
+    const baseDomain = decodeBase64(serverList[server] || serverList["1"]);
+    const videoSrc = `${baseDomain}${videoID}.mp4`;
+
+    var videoMode         = document.getElementById("videoMode");
+    var video             = document.getElementById("blogVideo");
+    var playBtn           = document.getElementById("playButton");
+    var clickArea         = document.querySelector(".video-click");
+    var progressArea      = document.querySelector(".progress-area");
+    var progressFill      = document.querySelector(".progress-fill");
+    var progressContainer = document.getElementById("progressContainer");
+    var closeButton       = document.getElementById("closeButton");
+    var currentTimeEl     = document.getElementById("currentTime");
+    var totalTimeEl       = document.getElementById("totalTime");
+
+    document.body.style.overflow = "hidden";
+    videoMode.style.display = "flex";
+
+    let isVideoLoaded = false;
+    let hideControlsTimeout = null;
+
+    function formatTime(seconds) {
+      if (isNaN(seconds) || !isFinite(seconds)) return "00:00";
+      const m = Math.floor(seconds / 60);
+      const s = Math.floor(seconds % 60);
+      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+    }
+
+    function showControls() {
+      progressContainer.classList.remove("hidden");
+      clearTimeout(hideControlsTimeout);
+
+      if (!video.paused) {
+        hideControlsTimeout = setTimeout(() => {
+          progressContainer.classList.add("hidden");
+        }, 2500);
+      }
+    }
+
+    function loadAndPlayVideo() {
+      if (!isVideoLoaded) {
+        video.src = videoSrc;
+        video.load();
+        isVideoLoaded = true;
+      }
+      video.play().catch(function(){});
+    }
+
+    // Play button
+    playBtn.onclick = function() {
+      loadAndPlayVideo();
+    };
+
+    // Klik area video
+    clickArea.onclick = function() {
+      if (!isVideoLoaded) {
+        loadAndPlayVideo();
+        return;
+      }
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    };
+
+    // Auto hide controls
+    video.onplay = function() {
+      playBtn.style.display = "none";
+      showControls();
+    };
+
+    video.onpause = function() {
+      playBtn.style.display = "flex";
+      showControls();
+      clearTimeout(hideControlsTimeout);
+    };
+
+    // Mouse / touch di area video → tampilkan controls
+    clickArea.addEventListener("mousemove", showControls);
+    clickArea.addEventListener("touchstart", showControls);
+    progressArea.addEventListener("click", showControls);
+
+    // Metadata siap
+    video.onloadedmetadata = function() {
+      totalTimeEl.textContent = formatTime(video.duration);
+    };
+
+    // Update progress + waktu
+    video.ontimeupdate = function() {
+      if (video.duration) {
+        progressFill.style.width = (video.currentTime / video.duration * 100) + "%";
+        currentTimeEl.textContent = formatTime(video.currentTime);
+      }
+    };
+
+    // Seek
+    progressArea.onclick = function(e) {
+      if (!isVideoLoaded) return;
+      var rect = progressArea.getBoundingClientRect();
+      var pos = (e.clientX - rect.left) / rect.width;
+      video.currentTime = pos * video.duration;
+      showControls();
+    };
+
+    closeButton.onclick = function() {
+      history.back();
+    };
+
+    // Sidebar
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    const sidebarPanel  = document.getElementById("sidebarPanel");
+    const sidebarClose  = document.getElementById("sidebarClose");
+
+    sidebarToggle.addEventListener("click", function() {
+      sidebarPanel.classList.add("open");
+      sidebarToggle.style.display = "none";
+    });
+
+    sidebarClose.addEventListener("click", function() {
+      sidebarPanel.classList.remove("open");
+      setTimeout(function() {
+        sidebarToggle.style.display = "flex";
+      }, 300);
+    });
+
+    // Proteksi
+    function enableVideoProtection(){
+      document.addEventListener('contextmenu', e => {
+        e.preventDefault();
+        return false;
+      });
+
+      document.addEventListener('keydown', function(e){
+        if(e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'i' || e.key === 'a')){
+          e.preventDefault();
+          return false;
+        }
+        if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J'))){
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      document.addEventListener('copy', e => e.preventDefault());
+      document.addEventListener('cut', e => e.preventDefault());
+      document.addEventListener('paste', e => e.preventDefault());
+    }
+    enableVideoProtection();
+
+    function showNoVideoInfo(){
+      const infoDiv = document.createElement("div");
+      infoDiv.style.cssText = `
+        position:fixed;top:0;left:0;width:100%;height:100vh;
+        background:#0f0f0f;color:#ffffff;z-index:9999999;
+        display:flex;align-items:center;justify-content:center;
+        flex-direction:column;font-family:Arial,sans-serif;
+        text-align:center;padding:20px;
+      `;
+      infoDiv.innerHTML = `
+        <h2>Video Player</h2>
+        <p style="font-size:18px;margin:20px 0;">Belum ada video yang dipilih.</p>
+        <p>Cari di Pencarian Faceb00k => <strong>Gobrots Jimbits Stream</strong></p>
+      `;
+      document.body.appendChild(infoDiv);
+    }
+  })();
+  </script>
+</body>
+</html>
