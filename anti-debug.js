@@ -1,4 +1,3 @@
-<script>
 (function () {
   // Fungsi utama anti-debugger
   function antiDebugger() {
@@ -66,4 +65,3 @@
     }
   });
 })();
-</script>
