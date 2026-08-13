@@ -361,217 +361,246 @@
     </div>
   </div>
 
-  <script>
-  (function(){
-    var params = new URLSearchParams(window.location.search);
-    var videoID = params.get("id");
-    var server = params.get("ser") || "1";
+<script>
+(function(){
+  var params = new URLSearchParams(window.location.search);
+  var videoID = params.get("id");
+  var server = params.get("ser") || "1";
 
-    if(!videoID){
-      const lastID = localStorage.getItem("lastVideoID");
-      const lastSer = localStorage.getItem("lastServer") || "1";
-      if(lastID){
-        const newURL = `${window.location.origin}${window.location.pathname}?id=${lastID}&ser=${lastSer}`;
-        window.location.href = newURL;
-        return;
-      } else {
-        showNoVideoInfo();
-        return;
-      }
+  if(!videoID){
+    const lastID = localStorage.getItem("lastVideoID");
+    const lastSer = localStorage.getItem("lastServer") || "1";
+    if(lastID){
+      const newURL = `${window.location.origin}${window.location.pathname}?id=${lastID}&ser=${lastSer}`;
+      window.location.href = newURL;
+      return;
     } else {
-      localStorage.setItem("lastVideoID", videoID);
-      localStorage.setItem("lastServer", server);
+      showNoVideoInfo();
+      return;
     }
+  } else {
+    localStorage.setItem("lastVideoID", videoID);
+    localStorage.setItem("lastServer", server);
+  }
 
-    var loadingScreen = document.getElementById("loadingScreen");
-    if(loadingScreen) loadingScreen.style.display = "none";
+  var loadingScreen = document.getElementById("loadingScreen");
+  if(loadingScreen) loadingScreen.style.display = "none";
 
-    function decodeBase64(str){
-      try { return atob(str); }
-      catch(e){ return "https://cdn2.videy.co/"; }
-    }
+  function decodeBase64(str){
+    try { return atob(str); }
+    catch(e){ return "https://cdn2.videy.co/"; }
+  }
 
-    const serverList = {
-      "1": "aHR0cHM6Ly9jZG4yLnZpZGV5LmNvLw==",
-      "2": "aHR0cHM6Ly9jZG4uYWNlaW1nLmNvbS8=",
-      "3": "aHR0cHM6Ly9maWxlcy5jYXRib3gubW9lLw==",
-      "4": "aHR0cHM6Ly9maWxlLmdhcmRlbi8="
-    };
+  const serverList = {
+    "1": "aHR0cHM6Ly9jZG4yLnZpZGV5LmNvLw==",
+    "2": "aHR0cHM6Ly9jZG4uYWNlaW1nLmNvbS8=",
+    "3": "aHR0cHM6Ly9maWxlcy5jYXRib3gubW9lLw==",
+    "4": "aHR0cHM6Ly9maWxlLmdhcmRlbi8="
+  };
 
+  // ========== SERVER 5 ==========
+  let videoSrc;
+  if (server === "5") {
+    videoSrc = videoID;
+  } else {
     const baseDomain = decodeBase64(serverList[server] || serverList["1"]);
-    const videoSrc = `${baseDomain}${videoID}.mp4`;
+    videoSrc = `${baseDomain}${videoID}.mp4`;
+  }
+  // ==============================
 
-    var videoMode         = document.getElementById("videoMode");
-    var video             = document.getElementById("blogVideo");
-    var playBtn           = document.getElementById("playButton");
-    var clickArea         = document.querySelector(".video-click");
-    var progressArea      = document.querySelector(".progress-area");
-    var progressFill      = document.querySelector(".progress-fill");
-    var progressContainer = document.getElementById("progressContainer");
-    var closeButton       = document.getElementById("closeButton");
-    var currentTimeEl     = document.getElementById("currentTime");
-    var totalTimeEl       = document.getElementById("totalTime");
+  var videoMode = document.getElementById("videoMode");
+  var video = document.getElementById("blogVideo");
+  var playBtn = document.getElementById("playButton");
+  var clickArea = document.querySelector(".video-click");
+  var progressArea = document.querySelector(".progress-area");
+  var progressFill = document.querySelector(".progress-fill");
+  var progressContainer = document.getElementById("progressContainer");
+  var closeButton = document.getElementById("closeButton");
+  var currentTimeEl = document.getElementById("currentTime");
+  var totalTimeEl = document.getElementById("totalTime");
 
-    document.body.style.overflow = "hidden";
-    videoMode.style.display = "flex";
+  document.body.style.overflow = "hidden";
+  videoMode.style.display = "flex";
 
-    let isVideoLoaded = false;
-    let hideControlsTimeout = null;
+  let isVideoLoaded = false;
+  let hideControlsTimeout = null;
 
-    function formatTime(seconds) {
-      if (isNaN(seconds) || !isFinite(seconds)) return "00:00";
-      const m = Math.floor(seconds / 60);
-      const s = Math.floor(seconds % 60);
-      return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  function formatTime(seconds) {
+    if (isNaN(seconds) || !isFinite(seconds)) return "00:00";
+    const m = Math.floor(seconds / 60);
+    const s = Math.floor(seconds % 60);
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  }
+
+  function showControls() {
+    progressContainer.classList.remove("hidden");
+    clearTimeout(hideControlsTimeout);
+    if (!video.paused) {
+      hideControlsTimeout = setTimeout(() => {
+        progressContainer.classList.add("hidden");
+      }, 2500);
     }
+  }
 
-    function showControls() {
-      progressContainer.classList.remove("hidden");
-      clearTimeout(hideControlsTimeout);
-
-      if (!video.paused) {
-        hideControlsTimeout = setTimeout(() => {
-          progressContainer.classList.add("hidden");
-        }, 2500);
-      }
+  function loadAndPlayVideo() {
+    if (!isVideoLoaded) {
+      video.src = videoSrc;
+      video.load();
+      isVideoLoaded = true;
     }
+    video.play().catch(function(){});
+  }
 
-    function loadAndPlayVideo() {
-      if (!isVideoLoaded) {
-        video.src = videoSrc;
-        video.load();
-        isVideoLoaded = true;
-      }
-      video.play().catch(function(){});
-    }
+  // Play button
+  playBtn.onclick = function() {
+    loadAndPlayVideo();
+  };
 
-    // Play button
-    playBtn.onclick = function() {
+  // Klik area video
+  clickArea.onclick = function() {
+    if (!isVideoLoaded) {
       loadAndPlayVideo();
-    };
+      return;
+    }
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
+  };
 
-    // Klik area video
-    clickArea.onclick = function() {
-      if (!isVideoLoaded) {
-        loadAndPlayVideo();
-        return;
-      }
-      if (video.paused) {
-        video.play();
-      } else {
-        video.pause();
-      }
-    };
+  // Auto hide controls
+  video.onplay = function() {
+    playBtn.style.display = "none";
+    showControls();
+  };
 
-    // Auto hide controls
-    video.onplay = function() {
-      playBtn.style.display = "none";
-      showControls();
-    };
+  video.onpause = function() {
+    playBtn.style.display = "flex";
+    showControls();
+    clearTimeout(hideControlsTimeout);
+  };
 
-    video.onpause = function() {
-      playBtn.style.display = "flex";
-      showControls();
-      clearTimeout(hideControlsTimeout);
-    };
+  // Mouse / touch di area video → tampilkan controls
+  clickArea.addEventListener("mousemove", showControls);
+  clickArea.addEventListener("touchstart", showControls);
+  progressArea.addEventListener("click", showControls);
 
-    // Mouse / touch di area video → tampilkan controls
-    clickArea.addEventListener("mousemove", showControls);
-    clickArea.addEventListener("touchstart", showControls);
-    progressArea.addEventListener("click", showControls);
+  // Metadata siap
+  video.onloadedmetadata = function() {
+    totalTimeEl.textContent = formatTime(video.duration);
+  };
 
-    // Metadata siap
-    video.onloadedmetadata = function() {
-      totalTimeEl.textContent = formatTime(video.duration);
-    };
+  // Update progress + waktu
+  video.ontimeupdate = function() {
+    if (video.duration) {
+      progressFill.style.width = (video.currentTime / video.duration * 100) + "%";
+      currentTimeEl.textContent = formatTime(video.currentTime);
+    }
+  };
 
-    // Update progress + waktu
-    video.ontimeupdate = function() {
-      if (video.duration) {
-        progressFill.style.width = (video.currentTime / video.duration * 100) + "%";
-        currentTimeEl.textContent = formatTime(video.currentTime);
-      }
-    };
+  // Seek
+  progressArea.onclick = function(e) {
+    if (!isVideoLoaded) return;
+    var rect = progressArea.getBoundingClientRect();
+    var pos = (e.clientX - rect.left) / rect.width;
+    video.currentTime = pos * video.duration;
+    showControls();
+  };
 
-    // Seek
-    progressArea.onclick = function(e) {
-      if (!isVideoLoaded) return;
-      var rect = progressArea.getBoundingClientRect();
-      var pos = (e.clientX - rect.left) / rect.width;
-      video.currentTime = pos * video.duration;
-      showControls();
-    };
+  closeButton.onclick = function() {
+    history.back();
+  };
 
-    closeButton.onclick = function() {
-      history.back();
-    };
+  // ========== SIDEBAR + AUTO HIDE ==========
+  const sidebarToggle = document.getElementById("sidebarToggle");
+  const sidebarPanel = document.getElementById("sidebarPanel");
+  const sidebarClose = document.getElementById("sidebarClose");
 
-    // Sidebar
-    const sidebarToggle = document.getElementById("sidebarToggle");
-    const sidebarPanel  = document.getElementById("sidebarPanel");
-    const sidebarClose  = document.getElementById("sidebarClose");
+  let sidebarHideTimeout = null;
 
-    sidebarToggle.addEventListener("click", function() {
-      sidebarPanel.classList.add("open");
-      sidebarToggle.style.display = "none";
+  function openSidebar() {
+    sidebarPanel.classList.add("open");
+    sidebarToggle.style.display = "none";
+    resetSidebarHideTimer();
+  }
+
+  function closeSidebar() {
+    sidebarPanel.classList.remove("open");
+    clearTimeout(sidebarHideTimeout);
+    setTimeout(function() {
+      sidebarToggle.style.display = "flex";
+    }, 300);
+  }
+
+  function resetSidebarHideTimer() {
+    clearTimeout(sidebarHideTimeout);
+    sidebarHideTimeout = setTimeout(function() {
+      closeSidebar();
+    }, 3500); // auto hide setelah 3.5 detik
+  }
+
+  sidebarToggle.addEventListener("click", function() {
+    openSidebar();
+  });
+
+  sidebarClose.addEventListener("click", function() {
+    closeSidebar();
+  });
+
+  // Reset timer saat ada interaksi di dalam sidebar
+  sidebarPanel.addEventListener("mousemove", resetSidebarHideTimer);
+  sidebarPanel.addEventListener("touchstart", resetSidebarHideTimer);
+  sidebarPanel.addEventListener("click", resetSidebarHideTimer);
+  // =========================================
+
+  // Proteksi
+  function enableVideoProtection(){
+    document.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      return false;
     });
-
-    sidebarClose.addEventListener("click", function() {
-      sidebarPanel.classList.remove("open");
-      setTimeout(function() {
-        sidebarToggle.style.display = "flex";
-      }, 300);
-    });
-
-    // Proteksi
-    function enableVideoProtection(){
-      document.addEventListener('contextmenu', e => {
+    document.addEventListener('keydown', function(e){
+      if(e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'i' || e.key === 'a')){
         e.preventDefault();
         return false;
-      });
+      }
+      if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J'))){
+        e.preventDefault();
+        return false;
+      }
+    });
+    document.addEventListener('copy', e => e.preventDefault());
+    document.addEventListener('cut', e => e.preventDefault());
+    document.addEventListener('paste', e => e.preventDefault());
+  }
+  enableVideoProtection();
 
-      document.addEventListener('keydown', function(e){
-        if(e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'i' || e.key === 'a')){
-          e.preventDefault();
-          return false;
-        }
-        if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J'))){
-          e.preventDefault();
-          return false;
-        }
-      });
+  function showNoVideoInfo(){
+    const infoDiv = document.createElement("div");
+    infoDiv.style.cssText = `
+      position:fixed;top:0;left:0;width:100%;height:100vh;
+      background:#0f0f0f;color:#ffffff;z-index:9999999;
+      display:flex;align-items:center;justify-content:center;
+      flex-direction:column;font-family:Arial,sans-serif;
+      text-align:center;padding:20px;
+    `;
+    infoDiv.innerHTML = `
+      <h2>Video Player</h2>
+      <p style="font-size:18px;margin:20px 0;">Belum ada video yang dipilih.</p>
+      <p>Cari di Pencarian Faceb00k => <strong>Gobrots Jimbits Stream</strong></p>
+    `;
+    document.body.appendChild(infoDiv);
+  }
+})();
+</script>
 
-      document.addEventListener('copy', e => e.preventDefault());
-      document.addEventListener('cut', e => e.preventDefault());
-      document.addEventListener('paste', e => e.preventDefault());
-    }
-    enableVideoProtection();
-
-    function showNoVideoInfo(){
-      const infoDiv = document.createElement("div");
-      infoDiv.style.cssText = `
-        position:fixed;top:0;left:0;width:100%;height:100vh;
-        background:#0f0f0f;color:#ffffff;z-index:9999999;
-        display:flex;align-items:center;justify-content:center;
-        flex-direction:column;font-family:Arial,sans-serif;
-        text-align:center;padding:20px;
-      `;
-      infoDiv.innerHTML = `
-        <h2>Video Player</h2>
-        <p style="font-size:18px;margin:20px 0;">Belum ada video yang dipilih.</p>
-        <p>Cari di Pencarian Faceb00k => <strong>Gobrots Jimbits Stream</strong></p>
-      `;
-      document.body.appendChild(infoDiv);
-    }
-  })();
-  </script>
-  <script>
+<script>
 (function () {
-    const params = new URLSearchParams(window.location.search);
-
-    if (params.has('id')) {
-        window.history.replaceState({}, document.title, window.location.origin + '/');
-    }
+  const params = new URLSearchParams(window.location.search);
+  if (params.has('id')) {
+    window.history.replaceState({}, document.title, window.location.origin + '/');
+  }
 })();
 </script>
 </body>
