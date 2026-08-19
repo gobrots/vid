@@ -4,29 +4,29 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <link rel="icon" href="favicon.ico">
-<title>Video Player - GOBROTS</title>
+<title>Video Player</title>
 <meta name="robots" content="noindex, nofollow">
 <meta name="description" content="Watch and enjoy videos with our simple and easy-to-use video player.">
 <meta name="keywords" content="video player, watch video, online video, video streaming, watch videos">
-<meta name="author" content="Video Player - GOBROTS">
-<meta name="generator" content="wordpress">
+<meta name="author" content="Video Player">
+<meta name="generator" content="Video Player">
 <meta name="theme-color" content="#563d7c">
 <meta name="google" content="notranslate">
-<link rel="canonical" href="https://vid.gobrots.mom/">
+<link rel="canonical" href="https://gobrots.github.io/vid">
 <meta property="og:type" content="video.other">
-<meta property="og:url" content="https://vid.gobrots.mom/">
-<meta property="og:title" content="Video Player - GOBROTS">
+<meta property="og:url" content="https://gobrots.github.io/vid">
+<meta property="og:title" content="Video Player">
 <meta property="og:description" content="Watch and enjoy videos with our simple and easy-to-use video player.">
-<meta property="og:image" content="https://vid.gobrots.mom/ZyrolinkBG.jpg">
+<meta property="og:image" content="https://gobrots.github.io/vid/ZyrolinkBG.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:site_name" content="Video Player - GOBROTS">
+<meta property="og:site_name" content="Video Player">
 <meta property="fb:app_id" content="200368456664008">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Video Player - GOBROTS">
+<meta name="twitter:title" content="Video Player">
 <meta name="twitter:description" content="Watch and enjoy videos with our simple and easy-to-use video player.">
-<meta name="twitter:image" content="https://vid.gobrots.mom/ZyrolinkBG.jpg">
+<meta name="twitter:image" content="https://gobrots.github.io/vid/ZyrolinkBG.jpg">
 <meta name="apple-itunes-app" content="app-id=200368456664008">
 <meta name="monetag" content="288f24b03da932525e8141278718aacd">
 <script src="anti-debugs.js?v=1"></script>
@@ -311,102 +311,6 @@
   <script>(function(s){s.dataset.zone='11559991',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <script>(function(s){s.dataset.zone='11559995',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <script>(function(s){s.dataset.zone='11560000',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<!-- ==================== ANTI ADBLOCK PRO (hanya satu fitur baru) ==================== -->
-<script>
-(function(){
-  let isAdBlockDetected = false;
-
-  function checkAdBlock() {
-    if (isAdBlockDetected) return;
-
-    // 1. Cek elemen iklan (banner, ubox, pop-up, footer ad, dll) — ini yang paling akurat
-    const adSelectors = [
-      'iframe[src*="ad"]', '.adsbygoogle', '.ad-container', '.banner',
-      '.sidebar-ad', '.right-ad', '.footer-ad', '.google-ad', '.doubleclick',
-      'iframe[src*="google"]', 'iframe[src*="ads"]', '.adbox', '.ad-slot',
-      '[id*="ad"]', '[class*="ad"]', 'div[style*="ad"]'
-    ];
-    const hasAd = adSelectors.some(sel => 
-      document.querySelector(sel) !== null ||
-      (sel.includes('iframe') && document.querySelectorAll(sel).length > 0)
-    );
-    if (hasAd) isAdBlockDetected = true;
-
-    // 2. Cek jika video sudah dimuat tapi tombol play masih terlihat (cara paling kuat)
-    const video = document.getElementById("blogVideo");
-    const playBtn = document.getElementById("playButton");
-    if (video && playBtn && playBtn.style.display !== "none" && video.currentTime > 0) {
-      isAdBlockDetected = true;
-    }
-
-    if (isAdBlockDetected) {
-      const playBtn = document.getElementById("playButton");
-      if (playBtn) {
-        playBtn.style.display = "none";
-        playBtn.style.opacity = "0";
-        playBtn.style.pointerEvents = "none";
-      }
-      showAdBlockWarningPopup();
-    }
-  }
-
-  function showAdBlockWarningPopup() {
-    const popup = document.createElement("div");
-    popup.style.cssText = `
-      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: #ff0000; color: white; padding: 30px 45px; border-radius: 15px;
-      font-size: 24px; text-align: center; z-index: 9999999999; box-shadow: 0 0 40px rgba(255,0,0,0.8);
-      border: 6px solid #fff; font-family: Arial, sans-serif;
-    `;
-    popup.innerHTML = `
-      <h2 style="margin:0 0 15px 0;">⚠️ AD BLOCK TERDETEKSI</h2>
-      <p style="margin:0 0 20px 0; font-size:19px;">Kamu menggunakan adblocker / bypass iklan.<br>Kami tidak bisa melayani.</p>
-      <p style="margin:0; font-size:17px;">Hapus adblocker untuk menonton video ini.</p>
-      <button onclick="this.parentElement.remove()" 
-              style="margin-top:25px; padding:14px 35px; background:#fff; color:#ff0000; border:none; border-radius:10px; font-size:19px; cursor:pointer;">
-        TUTUP
-      </button>
-    `;
-    document.body.appendChild(popup);
-
-    // Destroy tombol play + semua turunan
-    const playBtn = document.getElementById("playButton");
-    if (playBtn) {
-      playBtn.style.display = "none";
-      playBtn.style.opacity = "0";
-      playBtn.style.pointerEvents = "none";
-    }
-
-    const video = document.getElementById("blogVideo");
-    const clickArea = document.querySelector(".video-click");
-    const progressArea = document.querySelector(".progress-area");
-
-    if (video) {
-      video.pause();
-      video.src = "";
-      video.load();
-      video.onplay = null;
-      video.onpause = null;
-      video.onloadedmetadata = null;
-      video.ontimeupdate = null;
-      video.onerror = null;
-    }
-    if (clickArea) {
-      clickArea.onclick = null;
-      clickArea.onmousemove = null;
-      clickArea.ontouchstart = null;
-      clickArea.ontouchend = null;
-    }
-    if (progressArea) {
-      progressArea.onclick = null;
-    }
-  }
-
-  // Jalankan deteksi (cukup cepat & aman)
-  setInterval(checkAdBlock, 1200);
-  setTimeout(checkAdBlock, 2500);
-})();
-</script>
 </head>
 <body>
 
@@ -426,13 +330,14 @@
       <button id="sidebarClose">×</button>
     </div>
     <div class="sidebar-content">
-      <div class="placeholder">
-        <a href="https://pasteku.netlify.app/?8tNFy6tG">
-          <span style="display: block;color: aqua;">GAK USAH BASA BASI GAS KEUUN</span>
-        </a>
-        <br><br>
-        JANGAN LUPA DI FOLLOW FACEBOOK & TELE NYA OK DAN IYA PLEASE JANGAN DI REAPOT LAGI BIAR AKU BISA UPDATE TERUS TIAP HARI 🥰🙏
-      </div>
+      <!-- ============================== -->
+      <!--  ISI SENDIRI DI SINI NANTI     -->
+      <!-- ============================== -->
+      <div class="placeholder"><a href="https://pasteku.netlify.app/?8tNFy6tG">
+    <span style="display: block;color: aqua;">GAK USAH BASA BASI GAS KEUUN</span>
+</a>
+
+<br><br>JANGAN LUPA DI FOLLOW FACEBOOK &amp; TELE NYA OK DAN IYA PLEASE JANGAN DI REAPOT LAGI BIAR AKU BISA UPDATE TERUS TIAP HARI 🥰🙏</div>
     </div>
   </div>
 
@@ -461,18 +366,24 @@
 (function(){
   // ==================== STORAGE SYSTEM ====================
   const PREFIX = "v_";
-  const EXPIRE_MS = 7 * 24 * 60 * 60 * 1000;
+  const EXPIRE_MS = 7 * 24 * 60 * 60 * 1000; // 7 hari
+
   function cleanExpired() {
     const now = Date.now();
     Object.keys(localStorage).forEach(key => {
       if (key.startsWith(PREFIX)) {
         try {
           const data = JSON.parse(localStorage.getItem(key));
-          if (!data || data.expire < now) localStorage.removeItem(key);
-        } catch(e){ localStorage.removeItem(key); }
+          if (!data || data.expire < now) {
+            localStorage.removeItem(key);
+          }
+        } catch (e) {
+          localStorage.removeItem(key);
+        }
       }
     });
   }
+
   function getAllValid() {
     cleanExpired();
     const list = [];
@@ -481,62 +392,97 @@
         try {
           const data = JSON.parse(localStorage.getItem(key));
           if (data && data.expire > Date.now()) {
-            list.push({num: parseInt(key.replace(PREFIX,"")), id: data.id, ser: data.ser});
+            list.push({
+              num: parseInt(key.replace(PREFIX, "")),
+              id: data.id,
+              ser: data.ser
+            });
           }
-        } catch(e){}
+        } catch (e) {}
       }
     });
     return list;
   }
+
   function findExisting(id, ser) {
     const list = getAllValid();
-    return list.find(item => item.id === id && item.ser === ser) || null;
+    const found = list.find(item => item.id === id && item.ser === ser);
+    return found ? found.num : null;
   }
+
   function getNextNumber() {
     const list = getAllValid();
-    return list.length ? Math.max(...list.map(i => i.num)) + 1 : 1;
+    if (list.length === 0) return 1;
+    const max = Math.max(...list.map(item => item.num));
+    return max + 1;
   }
+
   function saveEntry(num, id, ser) {
-    localStorage.setItem(PREFIX + num, JSON.stringify({id, ser, expire: Date.now() + EXPIRE_MS}));
+    localStorage.setItem(PREFIX + num, JSON.stringify({
+      id: id,
+      ser: ser,
+      expire: Date.now() + EXPIRE_MS
+    }));
   }
+
   function loadEntry(num) {
     try {
       const raw = localStorage.getItem(PREFIX + num);
       if (!raw) return null;
       const data = JSON.parse(raw);
-      if (!data || data.expire < Date.now()) { localStorage.removeItem(PREFIX + num); return null; }
+      if (!data || data.expire < Date.now()) {
+        localStorage.removeItem(PREFIX + num);
+        return null;
+      }
       return data;
-    } catch(e){ return null; }
+    } catch (e) {
+      return null;
+    }
   }
+  // ========================================================
 
-  // ========== LOGIC PARAMETER ==========
   var params = new URLSearchParams(window.location.search);
   var videoID = params.get("id");
   var server = params.get("ser") || "1";
   var shortNum = null;
-  const rawSearch = window.location.search.substring(1);
-  if (/^\d+$/.test(rawSearch)) shortNum = rawSearch;
 
+  // Deteksi URL pendek ?1 / ?2 / ?3
+  const rawSearch = window.location.search.substring(1);
+  if (/^\d+$/.test(rawSearch)) {
+    shortNum = rawSearch;
+  }
+
+  // ========== LOGIC PARAMETER ==========
   if (videoID) {
+    // URL lengkap ada id → cek apakah sudah pernah disimpan
     let num = findExisting(videoID, server);
-    if (!num) { num = getNextNumber(); saveEntry(num, videoID, server); }
+    if (!num) {
+      num = getNextNumber();
+      saveEntry(num, videoID, server);
+    }
+    // Bersihkan URL jadi ?nomor
     history.replaceState({}, document.title, window.location.origin + window.location.pathname + "?" + num);
-  } else if (shortNum) {
+  } 
+  else if (shortNum) {
+    // URL pendek ?1 / ?2 → ambil dari storage
     const data = loadEntry(shortNum);
     if (data) {
       videoID = data.id;
       server = data.ser;
     } else {
+      // Data tidak ada / sudah kadaluarsa
       history.replaceState({}, document.title, window.location.origin + window.location.pathname);
       showNoVideoInfo();
       return;
     }
-  } else {
+  } 
+  else {
+    // Tidak ada id dan tidak ada nomor → tampilkan info
     showNoVideoInfo();
     return;
   }
-
   // ====================================
+
   var loadingScreen = document.getElementById("loadingScreen");
   if(loadingScreen) loadingScreen.style.display = "none";
 
@@ -552,6 +498,7 @@
     "4": "aHR0cHM6Ly9maWxlLmdhcmRlbi8="
   };
 
+  // ========== SERVER 5 ==========
   let videoSrc;
   if (server === "5") {
     videoSrc = videoID;
@@ -559,8 +506,8 @@
     const baseDomain = decodeBase64(serverList[server] || serverList["1"]);
     videoSrc = `${baseDomain}${videoID}.mp4`;
   }
+  // ==============================
 
-  // ========== VIDEO LOGIC (99% sama) ==========
   var videoMode = document.getElementById("videoMode");
   var video = document.getElementById("blogVideo");
   var playBtn = document.getElementById("playButton");
@@ -615,8 +562,11 @@
       loadAndPlayVideo();
       return;
     }
-    if (video.paused) video.play();
-    else video.pause();
+    if (video.paused) {
+      video.play();
+    } else {
+      video.pause();
+    }
   };
 
   // Auto hide controls
@@ -624,23 +574,24 @@
     playBtn.style.display = "none";
     showControls();
   };
+
   video.onpause = function() {
     playBtn.style.display = "flex";
     showControls();
     clearTimeout(hideControlsTimeout);
   };
 
-  // Mouse / touch
+  // Mouse / touch di area video → tampilkan controls
   clickArea.addEventListener("mousemove", showControls);
   clickArea.addEventListener("touchstart", showControls);
   progressArea.addEventListener("click", showControls);
 
-  // Metadata
+  // Metadata siap
   video.onloadedmetadata = function() {
     totalTimeEl.textContent = formatTime(video.duration);
   };
 
-  // Update progress
+  // Update progress + waktu
   video.ontimeupdate = function() {
     if (video.duration) {
       progressFill.style.width = (video.currentTime / video.duration * 100) + "%";
@@ -661,10 +612,11 @@
     history.back();
   };
 
-  // ========== SIDEBAR ==========
+  // ========== SIDEBAR + AUTO HIDE ==========
   const sidebarToggle = document.getElementById("sidebarToggle");
   const sidebarPanel = document.getElementById("sidebarPanel");
   const sidebarClose = document.getElementById("sidebarClose");
+
   let sidebarHideTimeout = null;
 
   function openSidebar() {
@@ -672,66 +624,104 @@
     sidebarToggle.style.display = "none";
     resetSidebarHideTimer();
   }
+
   function closeSidebar() {
     sidebarPanel.classList.remove("open");
     clearTimeout(sidebarHideTimeout);
-    setTimeout(() => sidebarToggle.style.display = "flex", 300);
+    setTimeout(function() {
+      sidebarToggle.style.display = "flex";
+    }, 300);
   }
+
   function resetSidebarHideTimer() {
     clearTimeout(sidebarHideTimeout);
-    sidebarHideTimeout = setTimeout(closeSidebar, 3500);
+    sidebarHideTimeout = setTimeout(function() {
+      closeSidebar();
+    }, 3500);
   }
-  sidebarToggle.addEventListener("click", openSidebar);
-  sidebarClose.addEventListener("click", closeSidebar);
+
+  sidebarToggle.addEventListener("click", function() {
+    openSidebar();
+  });
+
+  sidebarClose.addEventListener("click", function() {
+    closeSidebar();
+  });
+
   sidebarPanel.addEventListener("mousemove", resetSidebarHideTimer);
   sidebarPanel.addEventListener("touchstart", resetSidebarHideTimer);
   sidebarPanel.addEventListener("click", resetSidebarHideTimer);
+  // =========================================
 
-  // ========== KEYBOARD & DOUBLE TAP (tetap sama) ==========
+  // ========== KEYBOARD CONTROL ==========
   document.addEventListener("keydown", function(e) {
     if (!isVideoLoaded) return;
+
     if (e.code === "Space") {
       e.preventDefault();
-      video.paused ? video.play() : video.pause();
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
       showControls();
     }
+
     if (e.code === "ArrowLeft") {
       e.preventDefault();
       video.currentTime = Math.max(0, video.currentTime - 10);
       showControls();
     }
+
     if (e.code === "ArrowRight") {
       e.preventDefault();
       video.currentTime = Math.min(video.duration, video.currentTime + 10);
       showControls();
     }
   });
+  // ======================================
 
-  let lastTapTime = 0, lastTapX = 0;
+  // ========== DOUBLE TAP SEEK (MOBILE) ==========
+  let lastTapTime = 0;
+  let lastTapX = 0;
+
   clickArea.addEventListener("touchend", function(e) {
     if (!isVideoLoaded) return;
+
     const currentTime = new Date().getTime();
     const tapX = e.changedTouches[0].clientX;
     const screenWidth = window.innerWidth;
+
     if (currentTime - lastTapTime < 300 && Math.abs(tapX - lastTapX) < 50) {
       e.preventDefault();
-      if (tapX < screenWidth / 2) video.currentTime = Math.max(0, video.currentTime - 10);
-      else video.currentTime = Math.min(video.duration, video.currentTime + 10);
+
+      if (tapX < screenWidth / 2) {
+        video.currentTime = Math.max(0, video.currentTime - 10);
+      } else {
+        video.currentTime = Math.min(video.duration, video.currentTime + 10);
+      }
       showControls();
     }
+
     lastTapTime = currentTime;
     lastTapX = tapX;
   });
+  // ==============================================
 
-  // ========== PROTECTION (tetap) ==========
+  // Proteksi
   function enableVideoProtection(){
-    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('contextmenu', e => {
+      e.preventDefault();
+      return false;
+    });
     document.addEventListener('keydown', function(e){
       if(e.ctrlKey && (e.key === 'c' || e.key === 'u' || e.key === 's' || e.key === 'i' || e.key === 'a')){
         e.preventDefault();
+        return false;
       }
       if(e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J'))){
         e.preventDefault();
+        return false;
       }
     });
     document.addEventListener('copy', e => e.preventDefault());
@@ -742,8 +732,18 @@
 
   function showNoVideoInfo(){
     const infoDiv = document.createElement("div");
-    infoDiv.style.cssText = `position:fixed;top:0;left:0;width:100%;height:100vh;background:#0f0f0f;color:#ffffff;z-index:9999999;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:Arial,sans-serif;text-align:center;padding:20px;`;
-    infoDiv.innerHTML = `<h2>Video Player - GOBROTS</h2><p style="font-size:18px;margin:20px 0;">Belum ada video yang dipilih.</p><p>Cari di Pencarian Faceb00k => <strong>Gobrots Jimbits Stream</strong></p>`;
+    infoDiv.style.cssText = `
+      position:fixed;top:0;left:0;width:100%;height:100vh;
+      background:#0f0f0f;color:#ffffff;z-index:9999999;
+      display:flex;align-items:center;justify-content:center;
+      flex-direction:column;font-family:Arial,sans-serif;
+      text-align:center;padding:20px;
+    `;
+    infoDiv.innerHTML = `
+      <h2>Video Player</h2>
+      <p style="font-size:18px;margin:20px 0;">Belum ada video yang dipilih.</p>
+      <p>Cari di Pencarian Faceb00k => <strong>Gobrots Jimbits Stream</strong></p>
+    `;
     document.body.appendChild(infoDiv);
   }
 })();
