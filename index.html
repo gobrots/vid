@@ -311,21 +311,15 @@
   <script>(function(s){s.dataset.zone='11559991',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <script>(function(s){s.dataset.zone='11559995',s.src='https://nap5k.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
   <script>(function(s){s.dataset.zone='11560000',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-<!-- ==================== ANTI ADBLOCK PRO (satu-satunya yang baru) ==================== -->
+<!-- ==================== ANTI ADBLOCK PRO (hanya satu fitur baru) ==================== -->
 <script>
 (function(){
-  // Anti-AdBlock Professional - Deteksi akurat + popup + destroy play button
   let isAdBlockDetected = false;
 
   function checkAdBlock() {
     if (isAdBlockDetected) return;
 
-    // 1. Deteksi ekstensi adblocker (paling akurat)
-    if (typeof adBlockDetected !== 'undefined' && adBlockDetected) {
-      isAdBlockDetected = true;
-    }
-
-    // 2. Cek elemen iklan (ubi, banner, pop-up, footer, sidebar ad, dll)
+    // 1. Cek elemen iklan (banner, ubox, pop-up, footer ad, dll) — ini yang paling akurat
     const adSelectors = [
       'iframe[src*="ad"]', '.adsbygoogle', '.ad-container', '.banner',
       '.sidebar-ad', '.right-ad', '.footer-ad', '.google-ad', '.doubleclick',
@@ -338,7 +332,7 @@
     );
     if (hasAd) isAdBlockDetected = true;
 
-    // 3. Cek jika video sudah dimuat tapi tombol play masih terlihat
+    // 2. Cek jika video sudah dimuat tapi tombol play masih terlihat (cara paling kuat)
     const video = document.getElementById("blogVideo");
     const playBtn = document.getElementById("playButton");
     if (video && playBtn && playBtn.style.display !== "none" && video.currentTime > 0) {
@@ -375,7 +369,7 @@
     `;
     document.body.appendChild(popup);
 
-    // Destroy tombol play + semua atribut & event yang memanggil video
+    // Destroy tombol play + semua turunan
     const playBtn = document.getElementById("playButton");
     if (playBtn) {
       playBtn.style.display = "none";
@@ -408,9 +402,9 @@
     }
   }
 
-  // Jalankan deteksi setiap 800ms (cukup cepat tapi aman)
-  setInterval(checkAdBlock, 800);
-  setTimeout(checkAdBlock, 1500);
+  // Jalankan deteksi (cukup cepat & aman)
+  setInterval(checkAdBlock, 1200);
+  setTimeout(checkAdBlock, 2500);
 })();
 </script>
 </head>
